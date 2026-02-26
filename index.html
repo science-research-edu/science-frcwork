@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="utf-8">
+    <title>Fancade Local</title>
+    <meta name="fancade:guid" content="6208082864562F76">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="webapp/fancade_stripped.css">
+    
+    <script>
+        // Poki Fake-out: Prevents errors if the script tries to show an ad
+        window.PokiSDK = {
+            init: function() { return Promise.resolve(); },
+            gameLoadingStart: function() {},
+            gameLoadingFinished: function() {},
+            gameplayStart: function() {},
+            gameplayStop: function() {},
+            commercialBreak: function() { return Promise.resolve(); },
+            rewardedBreak: function() { return Promise.resolve(); },
+            enableEventTracking: function() {}
+        };
+    </script>
+</head>
+<body id="body" style="background-color: #000; margin: 0;">
+
+    <div id="canvas_border" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+        
+        <div id="play_content">
+            <div id="progress_or_play">
+                <progress id="progress" value="0" max="100"></progress>
+            </div>
+        </div>
+
+        <canvas id="canvas" oncontextmenu="event.preventDefault()"></canvas>
+        
+        <div id="gradient"></div>
+        <div id="webview_content"></div>
+    </div>
+
+    <div id="bottom_content" style="display:none;">
+        <div id="bottom_text"></div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-storage-compat.js"></script>
+    <script src="webapp/source_min_stripped.js"></script>
+    <script src="webapp/index_stripped.js"></script>
+    <script src="webapp/patch.js"></script>
+</body>
+</html>
