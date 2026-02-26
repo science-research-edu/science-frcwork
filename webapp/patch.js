@@ -44,17 +44,28 @@ XMLHttpRequest.prototype.send = function() {
 };
 
 // 5. Local Downloader
+// Updated Local Downloader for GitHub Sub-folders
 window.downloadLinkedGame = function(guid) {
     console.log("Super-Patch.js: Fetching local game data -> " + guid);
-    fetch("./" + guid + ".data")
-        .then(r => r.blob())
+    
+    // Using "./" ensures it looks inside the science-frcwork folder
+    let url = "./" + guid + ".data"; 
+    
+    fetch(url)
+        .then(r => {
+            if (!r.ok) throw new Error("File not found at " + url);
+            return r.blob();
+        })
         .then(blob => {
             window.singleGameBlob = blob;
             window.gameDownloadProgressFrac = 1;
             if (typeof updateLoadProgress === "function") updateLoadProgress();
+            console.log("Super-Patch.js: Data loaded successfully from " + url);
+        })
+        .catch(err => {
+            console.error("Super-Patch.js Download Error:", err);
         });
 };
-
 window.initPokiSdk = () => { window.pokiInited = true; };
 window.adInterstitialShow = () => { if(typeof setGameFocus === "function") setGameFocus(true); };
 
