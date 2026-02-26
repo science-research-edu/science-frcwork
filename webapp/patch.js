@@ -1,21 +1,27 @@
-console.log("Super-Patch.js: GitHub Mode Active.");
+console.log("Super-Patch.js: GitHub Pathing Active.");
 
-// 1. URL Hijacker: Forces the browser to look in /webapp/ for the engine data
+// FORCE ENGINE PATHS
+// This intercepts every request the game makes and adds the folder name
 const originalOpen = XMLHttpRequest.prototype.open;
 XMLHttpRequest.prototype.open = function(method, url) {
-    // If the game asks for index_stripped.data without the folder name
+    let finalUrl = url;
+
+    // If it's looking for engine files, force them into the webapp folder
     if (url === "index_stripped.data" || url === "index_stripped.wasm") {
-        url = "webapp/" + url;
-        console.log("Patch: Redirecting engine request to -> " + url);
+        finalUrl = "webapp/" + url;
     }
-    
-    // Ghost Server logic for API calls
+
+    // If it's looking for the game data file
+    if (url.includes("6208082864562F76.data")) {
+        finalUrl = "./6208082864562F76.data";
+    }
+
+    // Ghost Server for API calls
     if (url.includes(":5006") || url.includes("/ledger") || url.includes("/user")) {
         this._isGhost = true;
     }
 
-    this._url = url;
-    return originalOpen.apply(this, arguments);
+    return originalOpen.apply(this, [method, finalUrl]);
 };
 
 const originalSend = XMLHttpRequest.prototype.send;
@@ -30,9 +36,9 @@ XMLHttpRequest.prototype.send = function() {
     return originalSend.apply(this, arguments);
 };
 
-// 2. Local Game Data Downloader
+// Data Downloader
 window.downloadLinkedGame = function(guid) {
-    console.log("Patch: Fetching local game .data -> " + guid);
+    console.log("Patch: Fetching " + guid);
     fetch("./" + guid + ".data")
         .then(r => r.blob())
         .then(blob => {
