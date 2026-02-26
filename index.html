@@ -2,49 +2,28 @@
 <html lang="en-us">
 <head>
     <meta charset="utf-8">
-    <title>Fancade Local</title>
+    <title>Science Module</title>
+    <base href="./">
     <meta name="fancade:guid" content="6208082864562F76">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <link rel="stylesheet" href="webapp/fancade_stripped.css">
-    
-    <script>
-        // Poki Fake-out: Prevents errors if the script tries to show an ad
-        window.PokiSDK = {
-            init: function() { return Promise.resolve(); },
-            gameLoadingStart: function() {},
-            gameLoadingFinished: function() {},
-            gameplayStart: function() {},
-            gameplayStop: function() {},
-            commercialBreak: function() { return Promise.resolve(); },
-            rewardedBreak: function() { return Promise.resolve(); },
-            enableEventTracking: function() {}
-        };
-    </script>
+    <style>
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background-color: #000 !important; }
+        #canvas_border { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; background: #000 !important; }
+        canvas { width: 100% !important; height: 100% !important; display: block; outline: none; }
+        #play_content { position: absolute; z-index: 100; }
+        .overlay_button { padding: 20px 50px; background: #ff7e00; color: #fff; font-family: sans-serif; font-weight: bold; font-size: 28px; border-radius: 50px; border: 4px solid #fff; text-decoration: none; cursor: pointer; display: inline-block; }
+    </style>
 </head>
-<body id="body" style="background-color: #000; margin: 0;">
-
-    <div id="canvas_border" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
-        
-        <div id="play_content">
-            <div id="progress_or_play">
-                <progress id="progress" value="0" max="100"></progress>
-            </div>
-        </div>
-
-        <canvas id="canvas" oncontextmenu="event.preventDefault()"></canvas>
-        
-        <div id="gradient"></div>
-        <div id="webview_content"></div>
+<body>
+    <div id="canvas_border">
+        <div id="play_content"><div id="progress_or_play"></div></div>
+        <canvas id="canvas" oncontextmenu="event.preventDefault()" tabindex="-1"></canvas>
+        <div id="gradient" style="display:none"></div>
+        <div id="webview_content" style="display:none"></div>
     </div>
 
-    <div id="bottom_content" style="display:none;">
-        <div id="bottom_text"></div>
-    </div>
-
-    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-storage-compat.js"></script>
-    <script src="./webapp/source_min_stripped.js"></script>
-    <script src="./webapp/index_stripped.js"></script>
-    <script src="./webapp/patch.js"></script>
+    <script src="webapp/patch.js"></script>
+    <script src="webapp/source_min_stripped.js"></script>
+    <script src="webapp/index_stripped.js"></script>
 </body>
 </html>

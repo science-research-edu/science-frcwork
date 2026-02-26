@@ -46,25 +46,29 @@ XMLHttpRequest.prototype.send = function() {
 // 5. Local Downloader
 // Updated Local Downloader for GitHub Sub-folders
 window.downloadLinkedGame = function(guid) {
-    console.log("Super-Patch.js: Fetching local game data -> " + guid);
+    console.log("Super-Patch.js: GitHub Pathing Active. Fetching -> " + guid);
     
-    // Using "./" ensures it looks inside the science-frcwork folder
-    let url = "./" + guid + ".data"; 
+    // We try the most direct path first
+    let url = guid + ".data"; 
     
     fetch(url)
         .then(r => {
-            if (!r.ok) throw new Error("File not found at " + url);
-            return r.blob();
+            if (!r.ok) {
+                // If it fails (404), we try the full path including the repo name
+                // This is the "Magic Fix" for GitHub sub-folders
+                let fallback = window.location.pathname.split('/').slice(0, -1).join('/') + "/" + guid + ".data";
+                return fetch(fallback);
+            }
+            return r;
         })
+        .then(r => r.blob())
         .then(blob => {
             window.singleGameBlob = blob;
             window.gameDownloadProgressFrac = 1;
             if (typeof updateLoadProgress === "function") updateLoadProgress();
-            console.log("Super-Patch.js: Data loaded successfully from " + url);
+            console.log("Super-Patch.js: Success!");
         })
-        .catch(err => {
-            console.error("Super-Patch.js Download Error:", err);
-        });
+        .catch(err => console.error("Super-Patch.js: Still 404. Check folder structure."));
 };
 window.initPokiSdk = () => { window.pokiInited = true; };
 window.adInterstitialShow = () => { if(typeof setGameFocus === "function") setGameFocus(true); };
